@@ -10,7 +10,6 @@ using namespace std;
 
 int main()
 {
-	//usint dataset_No=1;
     bool Rnd_cost=false;
 	bool isReverse=true;
     dsfmt_gv_init_gen_rand(static_cast<uint32_t>(time(nullptr)));

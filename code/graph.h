@@ -2,7 +2,6 @@
 #include "FileCtrl.h"
 #include "serialize.h"
 #include "CommonStruc.h"
-//#include "Argument.h"
 #include <fstream>
 #include <tuple>
 using std::tuple;
@@ -30,7 +29,7 @@ public:
 			for (auto i = numE; i--;)
 			{
 				infile >> srcId >> dstId;
-				vecGRev[dstId].push_back(Edge(srcId, weight,0, 0));
+				vecGRev[dstId].push_back(Edge(srcId, weight));
 			}
 			infile.close();
 			for (size_t idx = 0; idx < numV; idx++)
@@ -56,7 +55,7 @@ public:
 			for (auto i = numE; i--;)
 			{
 				infile >> srcId >> dstId;
-				tuple<uint32_t, float, uint32_t, uint32_t> e=make_tuple(dstId, weight,0, 0);
+				pair<uint32_t, float> e=make_pair(dstId, weight);
 				vecG[srcId].push_back(e);
 				vecInDeg[dstId]+=1;
 			}
