@@ -42,7 +42,7 @@ public:
 	/// _cascadeModel: the cascade model, default is IC
 	//FRsets _FRsets_real; // Forward sets under the same realization
 
-	CascadeModel _cascadeModel;
+	string _cascadeModel;
 
 	explicit RRcollection(Graph & graph) : _graph(graph) // the 'const' modifier is deleted too.
 	{
@@ -50,13 +50,13 @@ public:
 	}
 
 	/// Set estimation mode
-	void set_model_mode(const CascadeModel model, const uint8_t mode)
+	void set_model_mode(const string model, const uint8_t mode)
 	{
 		_cascadeModel=model;
 		__mode=mode;
 	}
 	/// Set cascade model
-	void set_cascade_model(const CascadeModel model)
+	void set_cascade_model(const string model)
 	{
 		_cascadeModel = model;
 	}
@@ -124,7 +124,7 @@ public:
 		while (currIdx < numVisitNode)
 		{
 			const auto expand = __vecVisitNode[currIdx++];
-			if (_cascadeModel == IC)
+			if (_cascadeModel == "IC"||"ic")
 			{
 				for (auto& nbr : _graph[expand])
 				{
@@ -140,7 +140,7 @@ public:
 					_FRsets[nbrId].push_back(RRsetIdx);
 				}
 			}
-			else if (_cascadeModel == LT)
+			else if (_cascadeModel == "LT"||"lt")
 			{
 				if (_graph[expand].size() == 0)
 					continue;
