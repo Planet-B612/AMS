@@ -22,7 +22,7 @@ class Algorithm
 		double __delta_Inf=0.01;
 		Graph __F_graph;
 		Graph __R_graph;
-		CascadeModel __model;
+		string __model;
 		string __result_dir;
 		vector<vector<bool>> __vecCover;  // record whether an FRset_real is covered by some see
 
@@ -120,7 +120,7 @@ void set_cascade_model(const CascadeModel model)
 	//FF.set_cascade_model(model);
 }
 
-void set_parameters(const CascadeModel model, vector<double> cost, uint8_t mode, double prob, Graph F_graph, double eta, double eps_MC, double delta_MC, double tau, double delta_1, double lambda, double delta_2, double eps_Inf, double delta_Inf, double veri_epsilon_Inf, string result_dir, uint E_PCG, double RR_ratio, uint32_t dist, uint16_t THD)
+void set_parameters(const string model, vector<double> cost, uint8_t mode, double prob, Graph F_graph, double eta, double eps_MC, double delta_MC, double tau, double delta_1, double lambda, double delta_2, double eps_Inf, double delta_Inf, double veri_epsilon_Inf, string result_dir, uint E_PCG, double RR_ratio, uint32_t dist, uint16_t THD)
 {
 	RR.set_model_mode(model, mode);
 	__cost=cost;
@@ -177,7 +177,7 @@ pair<double, double> actual_prob_eval(const vector<uint32_t> & vecSeed, uint32_t
 		}
 
 		// BFS traversal
-		if (__model == IC)
+		if (__model == "IC"||"ic")
 		{
 			while (!Que.empty())
 			{
@@ -195,7 +195,7 @@ pair<double, double> actual_prob_eval(const vector<uint32_t> & vecSeed, uint32_t
 				}
 			}
 		}
-		else if (__model == LT)
+		else if (__model == "LT"||"lt")
 		{
 			while (!Que.empty())
 			{
@@ -244,63 +244,7 @@ pair<double, double> actual_prob_eval(const vector<uint32_t> & vecSeed, uint32_t
 	//return make_pair(exceed, spread);
 }
 
-	/// Efficiently estimate the influence spread with sampling error epsilon within probability 1-delta
-	double effic_inf_valid_algo(const vector<uint32_t>& vecSeed, const double delta = 1e-3, const double eps = 0.01)
-	{
-		const double c = 2.0 * (exp(1.0) - 2.0);
-		const double LambdaL = 1.0 + 2.0 * c * (1.0 + eps) * log(2.0 / delta) / (eps * eps);
-		//const double LambdaL = 2100000;
-		//cout<<"The num of RR-sets is "<<LambdaL<<endl;
-		size_t numHyperEdge = 0;
-		size_t numCoverd = 0;
-		std::vector<bool> vecBoolSeed(__numV);
-		for (auto seed : vecSeed) vecBoolSeed[seed] = true;
-		std::vector<bool> __vecVisitBool(__numV, false);
-		std::vector<uint32_t> __vecVisitNode(__numV);
-
-		while (numCoverd < LambdaL)
-		{
-			numHyperEdge++;
-			size_t numVisitNode = 0, currIdx = 0;
-			const auto uStart = dsfmt_gv_genrand_uint32_range(__numV);
-			if (vecBoolSeed[uStart])
-			{
-				// Stop, this sample is covered
-				numCoverd++;
-				continue;
-			}
-			__vecVisitNode[numVisitNode++] = uStart;
-			__vecVisitBool[uStart] = true;
-			while (currIdx < numVisitNode)
-			{
-				const auto expand = __vecVisitNode[currIdx++];
-				if (__model == IC)
-				{
-					for (auto& nbr : __R_graph[expand])
-					{
-						const auto nbrId = get<0>(nbr);
-						if (__vecVisitBool[nbrId])
-							continue;
-						const auto randDouble = dsfmt_gv_genrand_open_close();
-						if (randDouble > get<1>(nbr))
-							continue;
-						if (vecBoolSeed[nbrId])
-						{
-							// Stop, this sample is covered
-							numCoverd++;
-							goto postProcess;
-						}
-						__vecVisitNode[numVisitNode++] = nbrId;
-						__vecVisitBool[nbrId] = true;
-					}
-				}
-			}
-		postProcess:
-			for (auto i = 0; i < numVisitNode; i++)
-				__vecVisitBool[__vecVisitNode[i]] = false;
-		}
-		return 1.0 * numCoverd * __numV / numHyperEdge;
-	}
+	
 
 };//cls
 
