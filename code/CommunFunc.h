@@ -154,7 +154,7 @@ inline void min_heap_replace_min_value(FRset& vec, const size_t& val)
 }
 
 /// Make the vector to a max-heap.
-static inline void make_max_heap(vector< tuple<uint32_t, double, double, uint32_t> >& vec)
+static inline void make_max_heap(vector< tuple<uint32_t, double, uint32_t> >& vec)
 {
 	// Max heap
 	const auto size = vec.size();
@@ -168,13 +168,13 @@ static inline void make_max_heap(vector< tuple<uint32_t, double, double, uint32_
 			{
 				// Find smaller child
 				child = i * 2 + 2;
-				if (child == size || get<2>(vec[child - 1]) > get<2>(vec[child]))
+				if (child == size || get<1>(vec[child - 1]) > get<1>(vec[child]))
 				{
 					// One child only or the left child is greater than the right one
 					--child;
 				}
 				// Percolate one level
-				if ( get<2>(vec[child]) > get<2>(val) )
+				if ( get<1>(vec[child]) > get<1>(val) )
 				{
 					vec[i] = vec[child];
 				}
@@ -189,7 +189,7 @@ static inline void make_max_heap(vector< tuple<uint32_t, double, double, uint32_
 }
 
 /// Replace the value for the first element and down-heap this element.
-static inline void max_heap_replace_max_value(vector< tuple<uint32_t, double, double, uint32_t> >& vec, tuple<uint32_t, double, double, uint32_t>& val)
+static inline void max_heap_replace_max_value(vector< tuple<uint32_t, double, uint32_t> >& vec, tuple<uint32_t, double, uint32_t>& val)
 {
 	// Increase the value of the first element
 	const auto size = vec.size();
@@ -199,14 +199,14 @@ static inline void max_heap_replace_max_value(vector< tuple<uint32_t, double, do
 	{
 		// Find smaller child
 		child = i * 2 + 2;
-		if (child == size || get<2>(vec[child - 1]) > get<2>(vec[child]) )
+		if (child == size || get<1>(vec[child - 1]) > get<1>(vec[child]) )
 		{
 			// One child only or the left child is greater than the right one
 			--child;
 		}
 
 		// Percolate one level
-		if (get<2>(vec[child]) > get<2>(val) )
+		if (get<1>(vec[child]) > get<1>(val) )
 		{
 			vec[i] = vec[child];
 		}
