@@ -39,4 +39,4 @@ typedef pair<int, int> ipair;
 typedef pair<double, double> dpair;
 
 /// Cascade models: IC, LT
-enum CascadeModel { IC, LT };
+// enum CascadeModel { IC, LT };
