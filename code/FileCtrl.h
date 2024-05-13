@@ -8,6 +8,8 @@
 #include "serialize.h"
 #include <memory>
 #include <fstream>
+#include "CommonStruc.h"
+#include <iostream>
 
 using namespace std;
 class FileCtrl

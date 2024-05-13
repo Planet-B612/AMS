@@ -3,6 +3,7 @@
 #include "serialize.h"
 #include "CommonStruc.h"
 #include <fstream>
+#include <iostream>
 #include <tuple>
 using std::tuple;
 using namespace std;

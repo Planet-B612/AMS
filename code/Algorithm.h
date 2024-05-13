@@ -1,5 +1,5 @@
 #pragma once
-#include "RRsets.h"
+#include "mRRsets.h"
 #include "CommonStruc.h"
 #include "CommonFunc.h"
 #include <memory>
@@ -11,9 +11,9 @@ class Algorithm
 {
 	private:
 		uint32_t __numV=0;
-		size_t __numE=0;
+		//size_t __numE=0;
 		size_t num_RRsets = 0;
-		RRsets RR;
+		mRRsets RR;
 		Nodelist Seeds;
 		vector<double> __cost;
 		double __eta=1;
@@ -31,7 +31,7 @@ class Algorithm
 		Algorithm(Graph& graph) : RR(graph)
 		{
 			__numV = RR.get_nodes();
-			__numE = RR.get_edges();
+			//__numE = RR.get_edges();
 			__R_graph=graph;
 		}
 		~Algorithm()
@@ -85,12 +85,11 @@ vector<uint32_t> max_ratio_lazy(const double Q)
 		Seeds.push_back( nodeId );
 		total_cost=total_cost+__cost[nodeId];
 
-		if(__mode==1)	// 1: MC
+		if(__model=="1")	// 1: MC
 		{
 			total_deg=total_deg+get<1>(ratio[0]);  // No prob estimation, only evaluate based on expected influence.
-			expInf=1.0*__numV*total_deg/num_RRsets;
-			if(std::fmod(i, __dist)==0) est_prob=prob_est_MC(Seeds);  
-			if(est_prob>=__prob+__eps_MC)  //__eps_MC==lambda
+			expInf=1.0*__numV*total_deg/num_RRsets; 
+			if(expInf>=389237)  //__eps_MC==lambda
 			//if(est_prob>=__prob)  //__eps_MC==lambda
 			{
 				//cout<<"The total cost is "<<total_cost<<endl;
@@ -113,35 +112,21 @@ vector<uint32_t> max_ratio_lazy(const double Q)
 	
 }
 
-void set_cascade_model(const CascadeModel model)
+void set_cascade_model(const string model)
 {
 	__model=model;
 	RR.set_cascade_model(model);
 	//FF.set_cascade_model(model);
 }
 
-void set_parameters(const string model, vector<double> cost, uint8_t mode, double prob, Graph F_graph, double eta, double eps_MC, double delta_MC, double tau, double delta_1, double lambda, double delta_2, double eps_Inf, double delta_Inf, double veri_epsilon_Inf, string result_dir, uint E_PCG, double RR_ratio, uint32_t dist, uint16_t THD)
+void set_parameters(const string model, vector<double> cost, Graph F_graph, double eta, double eps_Inf, double delta_Inf, string result_dir)
 {
-	RR.set_model_mode(model, mode);
+	RR.set_cascade_model(model);
 	__cost=cost;
-	__mode=mode;
-	__prob=prob;
-	__eta=eta;
-	__eps_MC=eps_MC;
-	delta_MC=delta_MC;
-	__tau=tau;
-	__delta_1=delta_1;
-	__lambda=lambda;
-	__delta_2=delta_2;
 	__F_graph=F_graph;
 	__epsilon_Inf=eps_Inf;
 	__delta_Inf=delta_Inf;
-	__veri_epsilon_Inf=veri_epsilon_Inf;
 	__result_dir=result_dir;
-	__E_PCG=E_PCG;
-	__RR_ratio=RR_ratio;
-	__dist=dist;
-	__THD=THD;
 }
 
 void set_F_graph(const Graph F_graph)
@@ -149,9 +134,9 @@ void set_F_graph(const Graph F_graph)
 	__F_graph=F_graph;
 }
 
-double effic_inf_valid_algo(const double delta = 1e-3, const double eps = 0.01)
+Nodelist mine()
 {
-	return RR.effic_inf_valid_algo(Seeds, delta, eps);
+	return {};
 }
 
 pair<double, double> actual_prob_eval(const vector<uint32_t> & vecSeed, uint32_t simulations)

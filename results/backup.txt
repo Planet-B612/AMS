@@ -1,0 +1,3 @@
+# The parameters are: Rnd_cost=0, model=IC
+# The parameters are: Rnd_cost=0, model=IC
+# The parameters are: Rnd_cost=0, model=IC

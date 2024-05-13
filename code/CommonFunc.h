@@ -6,7 +6,7 @@
 #include <queue>
 #include "CommonStruc.h"
 using namespace std;
-#include "~/dSFMT/dSFMT.h"
+#include "../../dSFMT/dSFMT.h"
 #include <tuple>
 using std::tuple;
 /// Assertion
